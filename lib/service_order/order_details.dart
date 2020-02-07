@@ -1,3 +1,5 @@
+import 'package:car_wash/models/wash_kind.dart';
+import 'package:car_wash/services/wash_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,12 +10,12 @@ class OrderDetails extends StatefulWidget {
 
 class _OrderDetailsState extends State<OrderDetails> {
   void _showDialog() {
-    showDialog(
+    showDialog(      
       context: context,
       builder: (BuildContext context) {
         // retorna um objeto do tipo Dialog
         return AlertDialog(
-          title: Row(
+          title: Row(            
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -27,67 +29,72 @@ class _OrderDetailsState extends State<OrderDetails> {
       },
     );
   }
+  @override
+  void initState(){
+    initilizer();
+  }
 
+  initilizer()async{
+    List<WashKind> washKindsFind = await WashService().getWashKinds();
+    List<DropdownMenuItem<WashKind>> dropWashKinds = 
+    washKindsFind.map<DropdownMenuItem<WashKind>>((WashKind value) {
+                  return DropdownMenuItem<WashKind>(
+                    value: value,
+                    child: Text(value.descricao),
+                  );
+                }).toList();
+
+
+    washKinds = dropWashKinds;
+    dropdownValue = washKindsFind.first;
+  }
+  
+
+  List<DropdownMenuItem<WashKind>> washKinds;
   FocusNode nodeOne = FocusNode();
-  FocusNode nodeTwo = FocusNode();
-  String dataValue = DateTime.now().toString();
-  String dropdownValue = 'Manual';
+  FocusNode nodeTwo = FocusNode();  
+  WashKind dropdownValue;
   String dropdownConsumerValue = 'Bruno';
   String dropdownWasherValue = 'Bruno';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          ButtonBar(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: _showDialog,
-              ),
+    var controllerInput = TextEditingController(
+      text: dropdownConsumerValue
+    );
+        return Scaffold(
+          appBar: AppBar(
+            actions: <Widget>[
+              ButtonBar(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: _showDialog,
+                  ),
+                ],
+              )
             ],
-          )
-        ],
-        title: Text("Service Order"),
-      ),
-      body: ListView(
-        children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Data da lavagem',
-              prefixIcon: Icon(Icons.date_range),
-              labelText: 'Data da lavagem',
-            ),
-            keyboardType: TextInputType.datetime,
-            initialValue: dataValue,
+            title: Text("Service Order"),
           ),
-          DropdownButtonFormField<String>(
-            isDense: true,
-            decoration: InputDecoration(
-                labelText: 'Tipo de lavagem',
-                prefixIcon: Icon(Icons.local_car_wash)),
-            value: dropdownValue,
-            icon: Icon(Icons.arrow_drop_down),
-            hint: Text('Tipo lavagem'),
-            onChanged: (String newValue) {
-              setState(() {
-                dropdownValue = newValue;
-              });
-            },
-            items: <String>[
-              'Manual',
-              'Lavagem de motor',
-              'Lavagem por baixo',
-              'Lavagem automática',
-              'Lavagem Self-service'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          TextField(
+          body: ListView(
+            children: <Widget>[          
+              DropdownButtonFormField<WashKind>(
+                
+                isDense: true,            
+                decoration: InputDecoration(
+                    labelText: 'Tipo de lavagem',
+                    prefixIcon: Icon(Icons.local_car_wash)),
+                value: dropdownValue,
+                icon: Icon(Icons.arrow_drop_down),
+                hint: Text('Tipo lavagem'),
+                onChanged: (WashKind newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: washKinds,
+              ),
+              TextField(
+                controller: controllerInput,
             autofocus: true,
             onSubmitted: (input) {},
             decoration: InputDecoration(

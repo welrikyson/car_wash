@@ -1,6 +1,5 @@
-import 'package:car_wash/models/wash_kind.dart';
-import 'package:car_wash/service_order/order_details.dart';
-import 'package:car_wash/services/wash_service.dart';
+
+import 'package:car_wash/screens/service-order.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -33,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _navegation() async{
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OrderDetails()),
+      MaterialPageRoute(builder: (context) => ServiceOrder()),
     );
     // List<WashKind> washKinds = await WashService().getWashKinds();
     // print(washKinds.first.descricao);

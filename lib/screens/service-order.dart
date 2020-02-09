@@ -1,4 +1,8 @@
+import 'package:car_wash/models/vehicle-kind.dart';
+import 'package:car_wash/models/wash-kind.dart';
 import 'package:car_wash/widgets/dialog_search.dart';
+import 'package:car_wash/widgets/vehicle-kind-card.dart';
+import 'package:car_wash/widgets/wash-kind-card.dart';
 import 'package:flutter/material.dart';
 
 class ServiceOrder extends StatefulWidget {
@@ -7,19 +11,19 @@ class ServiceOrder extends StatefulWidget {
 }
 
 class _ServiceOrderState extends State<ServiceOrder> {
-  String selectedVehicleType;
-  String selectedWashKind;
+  VehicleKind selectedVehicleKind;
+  WashKind selectedWashKind;
   String selectedWasher;
   String selectedClient;
   String selectedVehicle;
 
-  onClickCardVehicle(String value) {
+  onClickCardVehicle(VehicleKind value) {
     setState(() {
-      selectedVehicleType = value;
+      selectedVehicleKind = value;
     });
   }
 
-  onClickCarWashKind(String value) {
+  onClickCarWashKind(WashKind value) {
     setState(() {
       selectedWashKind = value;
     });
@@ -71,85 +75,25 @@ class _ServiceOrderState extends State<ServiceOrder> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              Text(
-                "Tipo de veiculo",
-                style: Theme.of(context).textTheme.headline6,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Tipo de veículo",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
               Row(
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Carro"),
-                            Icon(Icons.directions_car)
-                          ],
-                        ),
-                        color: selectedVehicleType == "Car"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCardVehicle("Car");
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Moto"),
-                            Icon(Icons.motorcycle)
-                          ],
-                        ),
-                        color: selectedVehicleType == "Motocicle"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCardVehicle("Motocicle");
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Utilitário"),
-                            Icon(Icons.shopping_cart)
-                          ],
-                        ),
-                        color: selectedVehicleType == "Utilitário"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCardVehicle("Utilitário");
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Caminhão"),
-                            Icon(Icons.directions_bus)
-                          ],
-                        ),
-                        color: selectedVehicleType == "Truck"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCardVehicle("Truck");
-                      },
-                    ),
-                  ),
-                ],
+                children: VehicleKind.values
+                    .map((e) => Expanded(
+                          child: VehicleKindCard(
+                            vehicleKind: e,
+                            onTap: onClickCardVehicle,
+                            color: selectedVehicleKind == e
+                                ? Colors.deepPurple
+                                : Colors.white,
+                          ),
+                        ))
+                    .toList(),
               ),
             ],
           ),
@@ -158,68 +102,24 @@ class _ServiceOrderState extends State<ServiceOrder> {
           ),
           Column(
             children: <Widget>[
-              Text(
-                "Modo de lavagem",
-                style: Theme.of(context).textTheme.headline6,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Modo de lavagem",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
               Row(
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Simples"),
-                            Icon(Icons.local_car_wash)
-                          ],
-                        ),
-                        color: selectedWashKind == "Simples"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCarWashKind("Simples");
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Cera"),
-                            Icon(Icons.lightbulb_outline)
-                          ],
-                        ),
-                        color: selectedWashKind == "Cera"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCarWashKind("Cera");
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      child: Card(
-                        child: Column(
-                          children: <Widget>[
-                            Text("Completa"),
-                            Icon(Icons.star)
-                          ],
-                        ),
-                        color: selectedWashKind == "Completa"
-                            ? Colors.deepPurple[300]
-                            : Colors.white,
-                      ),
-                      onTap: () {
-                        onClickCarWashKind("Completa");
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                  children: WashKind.values
+                      .map((e) => Expanded(
+                              child: fromKind(
+                            washKind: e,
+                            onTap: onClickCarWashKind,
+                            color: selectedWashKind == e
+                                ? Colors.deepPurple
+                                : Colors.white,
+                          )))
+                      .toList()),
             ],
           ),
           SizedBox.fromSize(

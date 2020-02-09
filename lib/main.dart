@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               'order services',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline5,
             ),
           ],
         ),

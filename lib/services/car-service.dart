@@ -7,7 +7,7 @@ class VehicleService {
 class Mock {
   static Future<List<Vehicle>> getByQuery(String query) {    
     Future<List<Vehicle>> futureListResults = Future(() {
-      return vehicles.where((element) => element.name.contains(query)).toList();
+      return vehicles.where((element) => element.name.contains(query)||   element.plate.contains(query)).toList();
     });        
     return futureListResults;
   }

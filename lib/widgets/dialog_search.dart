@@ -102,11 +102,13 @@ class _DialogSearchState extends State<DialogSearch> {
       return Text(_error);
     } else if (_searchQuery.text.isEmpty) {
       return Text('Inicie a busca digitando na barra de busca');
-    } else {
+    } else {      
+      if(_results.isEmpty) return Text("Sem resultados");
       return ListView.builder(
           padding: EdgeInsets.symmetric(vertical: 8.0),
           itemCount: _results.length,
           itemBuilder: (BuildContext context, int index) {
+            
             var result = _results[index];
             return ListTile(
               subtitle: Text(result.name),

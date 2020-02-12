@@ -25,6 +25,8 @@ class _VehicleKindCardState extends State<VehicleKindCard> {
     var value = vehicleKindCards[widget.vehicleKind];
     title = value[0];
     iconData = value[1];
+    super.initState();
+    //
   }
   @override
   Widget build(BuildContext context) {

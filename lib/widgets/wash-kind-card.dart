@@ -6,6 +6,7 @@ const Map<WashKind,List> vehicleKindCards = {
     WashKind.simple: ["Simples",Icons.directions_car],
     WashKind.wax: ["Cera",Icons.motorcycle],
     WashKind.full: ["Completa",Icons.directions_railway],    
+    WashKind.diesel: ["Diesel",Icons.local_gas_station],    
 };
 
  ReusableCard fromKind({WashKind washKind,Color color, Function(WashKind) onTap}){

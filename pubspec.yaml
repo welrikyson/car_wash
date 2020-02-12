@@ -18,6 +18,8 @@ environment:
 
 dependencies:
   http:
+  intl: ^0.16.1
+  dio:
   flutter:
     sdk: flutter
 

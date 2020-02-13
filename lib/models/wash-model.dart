@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:car_wash/models/client-model.dart';
 import 'package:car_wash/models/vehicle-kind.dart';
@@ -16,12 +17,12 @@ class WashModel {
   String valueAjusted;
   String phone;
 
-  String get valueCurrent{
+  double get valueCurrent{
     if(this.vehicleKind == null || this.kind == null){
-      return "R\$ 0,00";
+      return 0.0;
     }
     final product = value[this.kind.index][this.vehicleKind.index];
-    return "R\$ ${product.value.replaceAll('.', ',')}";
+    return product.value;
   }
   //lavador
   ClientModel client;
@@ -38,7 +39,7 @@ class WashModel {
       this.phone});
 
   Map<String, dynamic> toJson() {
-    final product = value[this.vehicleKind.index][this.kind.index];
+    final product = value[this.kind.index][this.vehicleKind.index];
     return {
       "tipoLavagem": product.id, //id do produto
       "lavagem": product.description, //
@@ -46,15 +47,15 @@ class WashModel {
 
       "cliente": client.id, //id cliente
       "clienteNome": client.name, //
-      "clienteFone": client.phone, //
+      "clienteFone": phone.replaceAll('-', ''), //
 
       "veiculo": vehicle.id, //id veiculo
       "veiculoPlaca": vehicle.plate, //
       "veiculoDescricao": vehicle.name,
       "veiculoCor": vehicle.color, //
 
-      "lavador": washer.id, //id lavador
-      "lavadorDescricao": washer.nome, //
+      "lavador": washer?.id ?? null, //id lavador
+      "lavadorDescricao": washer?.nome ?? null, //
 
       //MEtadados do sistema
       "valorLavagem": valueAjusted, //valor da lavagem alterado
@@ -66,35 +67,35 @@ String washModelToJson(Vehicle data) => json.encode(data.toJson());
 
 final value = [
   [
-    Product(1, "LAV SIMPLES - PASSEIO", "25.00"),
-    Product(7, "LAV SIMPLES - MOTO", "20.00"),
-    Product(4, "LAV SIMPLES - UTILITARIO", "40.00"),
-    Product(9, "LAV SIMPLES - CAMINHAO", "120.00"),
+    Product(1, "LAV SIMPLES - PASSEIO", 25.00),
+    Product(7, "LAV SIMPLES - MOTO", 20.00),
+    Product(4, "LAV SIMPLES - UTILITARIO", 40.00),
+    Product(9, "LAV SIMPLES - CAMINHAO", 120.00),
   ],
   [
-    Product(2, "LAV SIMPLES C/ CERA - PASSEIO", "35.00"),
-    Product(8, "LAV SIMPLES C/ CERA - MOTO", "30.00"),
-    Product(5, "LAV SIMPLES C/ CERA - UTILITARIO", "50.00"),
-    Product(10, "LAV SIMPLES C/ CERA - CAMINHAO", "150.00"),
+    Product(2, "LAV SIMPLES C/ CERA - PASSEIO", 35.00),
+    Product(8, "LAV SIMPLES C/ CERA - MOTO", 30.00),
+    Product(5, "LAV SIMPLES C/ CERA - UTILITARIO", 50.00),
+    Product(10, "LAV SIMPLES C/ CERA - CAMINHAO", 150.00),
   ],
   [
-    Product(3, "LAV GERAL - PASSEIO", "60.00"),
-    Product(16, "LAV GERAL - MOTO", "60.00"),   
-    Product(6, "LAV GERAL - UTILITARIO", "70.00"),    
-    Product(11, "LAV GERAL - CAMINHAO", "200.00"),
+    Product(3, "LAV GERAL - PASSEIO", 60.00),
+    Product(16, "LAV GERAL - MOTO", 60.00),   
+    Product(6, "LAV GERAL - UTILITARIO", 70.00),    
+    Product(11, "LAV GERAL - CAMINHAO", 200.00),
   ],
   [
-    Product(1, "LAV C/ DIESEL - PASSEIO", ""),
-    Product(1, "LAV C/ DIESEL - MOTO", ""),
-    Product(1, "LAV C/ DIESEL - UTILITARIO", ""),
-    Product(1, "LAV C/ DIESEL - CAMINHAO", ""),
+    Product(1, "LAV C/ DIESEL - PASSEIO", 0.0),
+    Product(1, "LAV C/ DIESEL - MOTO", 0.0),
+    Product(1, "LAV C/ DIESEL - UTILITARIO", 0.0),
+    Product(1, "LAV C/ DIESEL - CAMINHAO", 0.0),
   ],
 ];
 
 class Product {
   int id;
   String description;
-  String value;
+  double value;
 
   Product(this.id, this.description, this.value);
 }

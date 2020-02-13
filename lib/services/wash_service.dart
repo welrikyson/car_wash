@@ -9,7 +9,7 @@ class WashService {
   var dio = Dio();
   static final urlBase = UrlBaseServe;
   Future post({WashModel entity}) async{
-    final uri = "/lavafacil/lavagem/cadastrarLavagem/?sessionMob=1";
+    final uri = "/lavagem/cadastrarLavagem/?sessionMob=1";
     
     var map = entity.toJson();
     map.addAll({      

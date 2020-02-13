@@ -10,6 +10,7 @@ import 'package:car_wash/shared/masked_text_input_formatter.dart';
 import 'package:car_wash/widgets/dialog_seach_consumer.dart';
 import 'package:car_wash/widgets/dialog_seach_washer.dart';
 import 'package:car_wash/widgets/dialog_search.dart';
+import 'package:car_wash/widgets/dialogs.dart';
 import 'package:car_wash/widgets/vehicle-kind-card.dart';
 import 'package:car_wash/widgets/wash-kind-card.dart';
 
@@ -22,12 +23,11 @@ class ServiceOrder extends StatefulWidget {
   _ServiceOrderState createState() => _ServiceOrderState();
 }
 
-class _ServiceOrderState extends State<ServiceOrder> {
-  WashModel washModel =
-      new WashModel(washer: WasherModel(id: 1, nome: "Lavador"));
-  String selectedWasher;
-
+class _ServiceOrderState extends State<ServiceOrder> {  
+  WashModel washModel = new WashModel();
+  
   TextEditingController _phoneController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _valueTextController =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
 
@@ -39,14 +39,14 @@ class _ServiceOrderState extends State<ServiceOrder> {
   onClickCardVehicle(VehicleKind value) {
     setState(() {
       washModel.vehicleKind = value;
-      _valueTextController.text = washModel.valueCurrent;
+      _valueTextController.updateValue(washModel.valueCurrent);
     });
   }
 
   onClickCarWashKind(WashKind value) {
     setState(() {
       washModel.kind = value;
-      _valueTextController.text = washModel.valueCurrent;
+      _valueTextController.updateValue(washModel.valueCurrent);
     });
   }
 
@@ -70,15 +70,17 @@ class _ServiceOrderState extends State<ServiceOrder> {
     if (result != null) {
       setState(() {
         washModel.client = result;
+        washModel.phone = result.phone;
+        _phoneController.text = washModel.phone;
       });
     }
   }
 
   _onPressedRestore() {
     setState(() {
-      washModel = new WashModel(washer: WasherModel(id: 1, nome: "Lavador"));
+      washModel = new WashModel();
       _phoneController.clear();
-      _valueTextController.text = "R\$ 0,00";
+      _valueTextController.updateValue(0.0);
     });
   }
 
@@ -91,7 +93,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
       setState(() {
         washModel.vehicle = result;
         washModel.client = result.client;
-        washModel.phone = result.client.phone;
+        washModel.phone = result.client?.phone ?? "";
       });
       _phoneController.text = washModel.phone;
 
@@ -101,32 +103,93 @@ class _ServiceOrderState extends State<ServiceOrder> {
     }
   }
 
+  bool formValide() {
+    
+
+    if (washModel.vehicleKind == null) {
+      showSnackBarMessege("Selecione um tipo de veiculo");
+      return false;
+    }
+    if (washModel.kind == null) {
+      showSnackBarMessege("Selecione um tipo de lavagem");
+      return false;
+    }
+    if (washModel.vehicle == null) {
+      showSnackBarMessege("Selecione um veículo");
+      return false;
+    }
+    if (!phoneValide(_phoneController.text)) {
+      showSnackBarMessege("Insira um telefone válido");
+      _phoneFocusNode.requestFocus();
+      return false;
+    }
+    if (_valueTextController.numberValue == 0.0 ||
+        _valueTextController.text.isEmpty) {
+      showSnackBarMessege("Altere valor da lavagem");
+      return false;
+    }
+
+    return true;
+  }
+
+  bool phoneValide(String value) {
+    final phone = value.replaceAll('-', '');
+    String patttern = r'[0-9]{5}[0-9]{4}';
+    RegExp regExp = new RegExp(patttern);
+    if (phone.length == 0) {
+      return false;
+    } else if (!regExp.hasMatch(phone)) {
+      return false;
+    }
+    return true;
+  }
+
+  showSnackBarMessege(String messege) {
+    final sucessBar = SnackBar(
+      action: SnackBarAction(
+        label: "OK",
+        onPressed: () {
+          _scaffoldKey.currentState.deactivate();
+        },
+      ),
+      content: Text(messege),
+      duration: Duration(
+        seconds: 2,
+      ),
+    );
+    _scaffoldKey.currentState.showSnackBar(sucessBar);
+  }
+  
   _onPressSave() async {
-    //TODO: validation phone number
-
-    washModel.valueAjusted = _valueTextController.text;
     try {
-      if (washModel.client == null)
-        washModel.client = ClientModel(
-            id: 1, name: 'CONSUMIDOR', phone: _phoneController.text);
-      else
-        washModel.client = ClientModel(
-            id: washModel.client.id,
-            name: washModel.client.name,
-            phone: _phoneController.text);
+      if (formValide()) {
+        if (washModel.client == null)
+          washModel.client = ClientModel(
+              id: 1, name: 'CONSUMIDOR', phone: _phoneController.text);
 
-      await service.post(entity: this.washModel);
-      _showSnackBarMessageSucess();
-      setState(() {
-        washModel = new WashModel();
-      });
-      _phoneController.clear();
+        this.washModel.valueAjusted =
+            _valueTextController.numberValue.toString();        
+        washModel.phone = _phoneController.text;
+        FocusScope.of(context).unfocus();
+        Dialogs.showLoadingDialog(context, _keyLoader);//invoking login
+        await service.post(entity: this.washModel);
+        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();//close the dialoge
+        
+        
+        _showSnackBarMessageSucess();
+        setState(() {
+          washModel = new WashModel();
+        });
+        _phoneController.clear();
+        _valueTextController.updateValue(0.0);
+      }
     } catch (ex) {
       _scaffoldKey.currentState.showSnackBar(errorBar);
     }
   }
+   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-  _showSnackBarMessageSucess({String message = "Salva com sucesso"}) {
+  _showSnackBarMessageSucess({String message = "Salvo com sucesso"}) {
     final sucessBar = SnackBar(
       action: SnackBarAction(
         label: "Ir inicio",
@@ -136,31 +199,30 @@ class _ServiceOrderState extends State<ServiceOrder> {
       ),
       content: Text(message),
       duration: Duration(
-        seconds: 2,
+        seconds: 1,
       ),
     );
     _scaffoldKey.currentState.showSnackBar(sucessBar);
   }
 
   final errorBar = SnackBar(
-    content: Text("Salvo com sucesso"),
+    content: Text("Erro"),
     duration: Duration(
       seconds: 2,
     ),
   );
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  initState() {
+  initState() {    
+    _configPriceField();
     super.initState();
-    _valueTextController.addListener(() {
-      final newText = _valueTextController.text.toLowerCase();
-      _valueTextController.value = _valueTextController.value.copyWith(
-        text: newText,
-        selection: TextSelection(
-            baseOffset: newText.length, extentOffset: newText.length),
-        composing: TextRange.empty,
-      );
+  }
+
+  _configPriceField() {
+    _focusPrice.addListener(() {
+      if (_focusPrice.hasFocus) {
+        _valueTextController.selection = TextSelection(
+            baseOffset: 0, extentOffset: _valueTextController.text.length);
+      }
     });
   }
 
@@ -401,6 +463,10 @@ class _ServiceOrderState extends State<ServiceOrder> {
                 Container(
                   width: 180,
                   child: TextFormField(
+                    enableInteractiveSelection: false,
+                    onChanged: (arg) {
+                      washModel.valueAjusted = arg;
+                    },
                     focusNode: _focusPrice,
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly,

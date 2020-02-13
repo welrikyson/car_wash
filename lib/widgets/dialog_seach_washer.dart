@@ -114,7 +114,7 @@ class _DialogSearchWasherState extends State<DialogSearchWasher> {
       if (_results.isEmpty) {
         return Column(
           children: <Widget>[
-            Text("Sem resultados, enter para cadastrar"),            
+            Text("Nenhum resultado."),            
           ],
         );
       }

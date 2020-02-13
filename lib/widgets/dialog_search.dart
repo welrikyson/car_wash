@@ -76,10 +76,34 @@ class _DialogSearchState extends State<DialogSearch> {
 
   _onPressConfirm() {
     final name = _clientNameController.text;
-    final phone = _searchQuery.text;
+    final plate = _searchQuery.text;
 
-    final newClient = ClientModel(name: name, phone: phone);
+    if(!validePlate(plate) | (name.length < 2)) return;
+
+    final newClient = Vehicle(name: name, plate: plate);
     Navigator.pop(context, newClient);
+  }
+
+  bool validePlate(String value){
+    final plate = value;
+
+    if(plate.length < 7)return false;
+
+    String patttern = r'[A-Z]{3}[-][0-9]{4}';
+    RegExp regExp = new RegExp(patttern);
+    if (regExp.hasMatch(value)) {
+      return true;
+    }
+
+    String pattternMerc = r'[A-Z]{3}[-][0-9]{1}[A-Z]{1}[0-9]{2}';
+    RegExp regExpMerc = new RegExp(pattternMerc);
+    if (regExpMerc.hasMatch(value)) {
+      return true;
+    }
+
+    
+
+    return false;
   }
 
   @override

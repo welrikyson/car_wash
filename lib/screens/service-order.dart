@@ -6,7 +6,9 @@ import 'package:car_wash/models/wash-model.dart';
 import 'package:car_wash/models/washer-model.dart';
 import 'package:car_wash/services/wash_service.dart';
 import 'package:car_wash/shared/currency_input_formatter.dart';
+import 'package:car_wash/shared/masked_text_input_formatter.dart';
 import 'package:car_wash/widgets/dialog_seach_consumer.dart';
+import 'package:car_wash/widgets/dialog_seach_washer.dart';
 import 'package:car_wash/widgets/dialog_search.dart';
 import 'package:car_wash/widgets/vehicle-kind-card.dart';
 import 'package:car_wash/widgets/wash-kind-card.dart';
@@ -45,10 +47,16 @@ class _ServiceOrderState extends State<ServiceOrder> {
     });
   }
 
-  finderWasher() {
-    setState(() {
-      selectedWasher = "Pedro Lavador";
-    });
+  finderWasher() async{
+    final result = await showDialog<WasherModel>(
+      context: context,
+      builder: (context) => DialogSearchWasher(),
+    );
+    if (result != null) {
+      setState(() {
+        washModel.washer = result;
+      });
+    }
   }
 
   finderClient() async {
@@ -288,9 +296,10 @@ class _ServiceOrderState extends State<ServiceOrder> {
                     labelText: 'Telefone do consumidor',
                   ),
                   inputFormatters: <TextInputFormatter>[
-                    LengthLimitingTextInputFormatter(9),
-                    WhitelistingTextInputFormatter.digitsOnly,
-                    BlacklistingTextInputFormatter.singleLineFormatter,
+                    MaskedTextInputFormatter(
+                      mask: 'xxxxx-xxxx',
+                      separator: '-',
+                    ),
                   ],
                   keyboardType: TextInputType.phone,                  
                 ),
@@ -308,11 +317,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                             Icon(
                               Icons.invert_colors,
                             ),
-                            Text(
-                              selectedWasher == null
-                                  ? 'Lavador'
-                                  : selectedWasher,
-                            ),
+                            Text(washModel.washer?.nome ?? "Lavador"),
                           ],
                         ),
                       ),

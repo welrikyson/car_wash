@@ -49,9 +49,7 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
       _isSearching = true;
       _error = null;
       _results = List();
-    });
-
-    //TODO: remove this
+    });    
 
     final repos = await ClientService.getBy(query);
     if (this._searchQuery.text == query && this.mounted) {

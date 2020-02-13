@@ -1,6 +1,6 @@
 enum VehicleKind {
-  motorcycle,
   car,
-  truck,
+  motorcycle,  
   pickup,
+  truck,  
 }

@@ -20,7 +20,7 @@ class WashModel {
     if(this.vehicleKind == null || this.kind == null){
       return "R\$ 0,00";
     }
-    final product = value[this.vehicleKind.index][this.kind.index];
+    final product = value[this.kind.index][this.vehicleKind.index];
     return "R\$ ${product.value.replaceAll('.', ',')}";
   }
   //lavador
@@ -75,12 +75,12 @@ final value = [
     Product(2, "LAV SIMPLES C/ CERA - PASSEIO", "35.00"),
     Product(8, "LAV SIMPLES C/ CERA - MOTO", "30.00"),
     Product(5, "LAV SIMPLES C/ CERA - UTILITARIO", "50.00"),
-    Product(10, "LAV SIMPLES C/ CERA - CAMINHAO", "120.00"),
+    Product(10, "LAV SIMPLES C/ CERA - CAMINHAO", "150.00"),
   ],
   [
     Product(3, "LAV GERAL - PASSEIO", "60.00"),
-// values[2][1] = Product(1,"LAV GERAL - MOTO","");,
-    Product(6, "LAV GERAL - UTILITARIO", "70.00"),
+    Product(16, "LAV GERAL - MOTO", "60.00"),   
+    Product(6, "LAV GERAL - UTILITARIO", "70.00"),    
     Product(11, "LAV GERAL - CAMINHAO", "200.00"),
   ],
   [

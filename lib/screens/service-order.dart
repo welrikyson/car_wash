@@ -92,7 +92,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
   }
 
   _onPressSave() async {
-    washModel.valueAjusted = "40.00";
+    //TODO: validation phone number
+    washModel.valueAjusted = _valueTextController.text.replaceAll('R\$ ', '');
     try {      
       if (washModel.client == null)
         washModel.client = ClientModel(
@@ -281,6 +282,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                   focusNode: _phoneFocusNode,
                   controller: _phoneController,
                   decoration: InputDecoration(
+                    prefixText: "(92) ",                  
                     hintText: 'Telefone',
                     prefixIcon: Icon(Icons.phone),
                     labelText: 'Telefone do consumidor',
@@ -290,7 +292,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                     WhitelistingTextInputFormatter.digitsOnly,
                     BlacklistingTextInputFormatter.singleLineFormatter,
                   ],
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.phone,                  
                 ),
                 SizedBox.fromSize(
                   size: Size.fromHeight(10),

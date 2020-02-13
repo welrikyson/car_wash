@@ -391,7 +391,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                               child: RaisedButton(
                   onPressed: _onPressSave,
                   child: Text('SALVAR LAVAGEM',
-                      style: Theme.of(context).accentTextTheme.title),
+                      style: Theme.of(context).accentTextTheme.button.copyWith(fontSize: 22)),
                   color: Theme.of(context).primaryColor,
                 ),
               ),

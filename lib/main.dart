@@ -50,11 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button to add orders:',
+              'Gestão de Auto Posto',
             ),
             Text(
-              'order services',
-              style: Theme.of(context).textTheme.display1,
+              'GAP',
+              style: Theme.of(context).textTheme.headline3,
             ),
           ],
         ),

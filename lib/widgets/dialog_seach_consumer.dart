@@ -83,7 +83,7 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
             children: <Widget>[
               Text(
                 "Clientes",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
               TextField(                
                 controller: _searchQuery,

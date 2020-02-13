@@ -15,6 +15,7 @@ import 'package:car_wash/widgets/wash-kind-card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class ServiceOrder extends StatefulWidget {
   @override
@@ -27,9 +28,11 @@ class _ServiceOrderState extends State<ServiceOrder> {
   String selectedWasher;
 
   TextEditingController _phoneController = TextEditingController();
-  TextEditingController _valueTextController = TextEditingController(text: "R\$ 0,00");
+  final _valueTextController =
+      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
 
   FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _focusPrice = FocusNode();
 
   final service = WashService();
 
@@ -47,7 +50,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
     });
   }
 
-  finderWasher() async{
+  finderWasher() async {
     final result = await showDialog<WasherModel>(
       context: context,
       builder: (context) => DialogSearchWasher(),
@@ -75,7 +78,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
     setState(() {
       washModel = new WashModel(washer: WasherModel(id: 1, nome: "Lavador"));
       _phoneController.clear();
-      _valueTextController.text ="R\$ 0,00";
+      _valueTextController.text = "R\$ 0,00";
     });
   }
 
@@ -87,9 +90,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
     if (result != null) {
       setState(() {
         washModel.vehicle = result;
-        washModel.client = result.client;        
+        washModel.client = result.client;
         washModel.phone = result.client.phone;
-
       });
       _phoneController.text = washModel.phone;
 
@@ -101,8 +103,9 @@ class _ServiceOrderState extends State<ServiceOrder> {
 
   _onPressSave() async {
     //TODO: validation phone number
-    washModel.valueAjusted = _valueTextController.text.replaceAll('R\$ ', '');
-    try {      
+
+    washModel.valueAjusted = _valueTextController.text;
+    try {
       if (washModel.client == null)
         washModel.client = ClientModel(
             id: 1, name: 'CONSUMIDOR', phone: _phoneController.text);
@@ -115,7 +118,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
       await service.post(entity: this.washModel);
       _showSnackBarMessageSucess();
       setState(() {
-        washModel = new WashModel(washer: WasherModel(id: 1, nome: "Lavador"));
+        washModel = new WashModel();
       });
       _phoneController.clear();
     } catch (ex) {
@@ -147,6 +150,19 @@ class _ServiceOrderState extends State<ServiceOrder> {
   );
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  initState() {
+    super.initState();
+    _valueTextController.addListener(() {
+      final newText = _valueTextController.text.toLowerCase();
+      _valueTextController.value = _valueTextController.value.copyWith(
+        text: newText,
+        selection: TextSelection(
+            baseOffset: newText.length, extentOffset: newText.length),
+        composing: TextRange.empty,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +287,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                               child: washModel.client == null
                                   ? Text('Consumidor')
                                   : Column(
-                                      children: <Widget>[                                        
+                                      children: <Widget>[
                                         Text(washModel.client.name),
                                       ],
                                     ),
@@ -290,7 +306,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                   focusNode: _phoneFocusNode,
                   controller: _phoneController,
                   decoration: InputDecoration(
-                    prefixText: "(92) ",                  
+                    prefixText: "(92) ",
                     hintText: 'Telefone',
                     prefixIcon: Icon(Icons.phone),
                     labelText: 'Telefone do consumidor',
@@ -301,7 +317,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
                       separator: '-',
                     ),
                   ],
-                  keyboardType: TextInputType.phone,                  
+                  keyboardType: TextInputType.phone,
                 ),
                 SizedBox.fromSize(
                   size: Size.fromHeight(10),
@@ -344,28 +360,28 @@ class _ServiceOrderState extends State<ServiceOrder> {
           SizedBox.fromSize(
             size: Size.fromHeight(10),
           ),
-          Container(            
+          Container(
             decoration: new BoxDecoration(
               color: Colors.white,
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey,
-        blurRadius: 20.0, // has the effect of softening the shadow
-        spreadRadius: 5.0, // has the effect of extending the shadow
-        offset: Offset(
-          10.0, // horizontal, move right 10
-          10.0, // vertical, move down 10
-        ),
-      )
-    ],
-    
-    
-  ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 20.0, // has the effect of softening the shadow
+                  spreadRadius: 5.0, // has the effect of extending the shadow
+                  offset: Offset(
+                    10.0, // horizontal, move right 10
+                    10.0, // vertical, move down 10
+                  ),
+                )
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 10,),
-                Align(                  
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
                   alignment: Alignment.topCenter,
                   child: Text(
                     "Valor da lavagem",
@@ -375,36 +391,40 @@ class _ServiceOrderState extends State<ServiceOrder> {
                 Container(
                   width: 180,
                   child: TextFormField(
+                    focusNode: _focusPrice,
                     inputFormatters: [
-                       WhitelistingTextInputFormatter.digitsOnly,
+                      WhitelistingTextInputFormatter.digitsOnly,
                       CurrencyInputFormatter(),
                     ],
                     style: TextStyle(fontSize: 40.0),
                     textAlign: TextAlign.right,
                     controller: _valueTextController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(                    
+                    decoration: InputDecoration(
+                      prefixText: "R\$",
                       isDense: true,
                       border: InputBorder.none,
                     ),
                   ),
                 ),
                 Container(
-              width: double.infinity,
-              child: ButtonTheme(
-                height: 60,
-                              child: RaisedButton(
-                  onPressed: _onPressSave,
-                  child: Text('SALVAR LAVAGEM',
-                      style: Theme.of(context).accentTextTheme.button.copyWith(fontSize: 22)),
-                  color: Theme.of(context).primaryColor,
+                  width: double.infinity,
+                  child: ButtonTheme(
+                    height: 60,
+                    child: RaisedButton(
+                      onPressed: _onPressSave,
+                      child: Text('SALVAR LAVAGEM',
+                          style: Theme.of(context)
+                              .accentTextTheme
+                              .button
+                              .copyWith(fontSize: 22)),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
-              ),
-            ),
               ],
             ),
           ),
-          
         ],
       ),
     ));

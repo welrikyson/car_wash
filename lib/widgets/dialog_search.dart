@@ -92,7 +92,7 @@ class _DialogSearchState extends State<DialogSearch> {
             children: <Widget>[
               Text(
                 "Veículos",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.display1,
               ),
               TextField(
                 inputFormatters: [

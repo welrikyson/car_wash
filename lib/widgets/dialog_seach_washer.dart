@@ -74,7 +74,7 @@ class _DialogSearchWasherState extends State<DialogSearchWasher> {
             children: <Widget>[
               Text(
                 "Lavadores",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.display1,
               ),
               TextField(                
                 controller: _searchQuery,

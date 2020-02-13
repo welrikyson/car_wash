@@ -1,23 +1,16 @@
 import 'dart:convert';
-
+import 'global_datas.dart';
 import 'package:car_wash/models/vehicle-model.dart';
 import 'package:dio/dio.dart';
-//import 'package:http/http.dart' as http;
 
 class VehicleService {
-
+  static final urlBase = UrlBaseServe;
 
   static Future<List<Vehicle>> getBy(String query) async {   
-    final uri = "http://ciadopescado.com.br/gap/veiculo/veiculoGet/?sessionMob=1";
-    //final uri = "http://192.168.0.63/lavafacil/veiculo/veiculoGet/?sessionMob=1";
+    final uri = "/veiculo/veiculoGet/?sessionMob=1";    
     var dio = Dio();
     FormData formData = new FormData.fromMap({ "q": query,});
-    final response = await dio.post(uri, data: formData);    
-  
-    
-
-    
-
+    final response = await dio.post(urlBase+uri, data: formData);    
     if (response.statusCode == 200) {
       return Vehicle.fromJsonList(json.decode(response.data));
     } else {

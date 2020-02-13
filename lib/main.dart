@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               'GAP',
-              style: Theme.of(context).textTheme.headline3,
+              style: Theme.of(context).textTheme.display3,
             ),
           ],
         ),

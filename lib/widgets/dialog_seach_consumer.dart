@@ -123,36 +123,7 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
       if (_results.isEmpty) {
         return Column(
           children: <Widget>[
-            Text("Sem resultados, enter para cadastrar"),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    validator: (String arg) {
-                      if (arg.length < 2) {
-                        return 'Nome deve ter mais que 2 caracteres.';
-                      } else
-                        return null;
-                    },
-                    controller: _vehicleNameController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "nome",
-                        isDense: true),
-                  ),
-                  DropdownButton(
-                    onChanged: (arg){},
-                    items: ["preto","branco"].map((color)=> DropdownMenuItem(child: Text(color))).toList(),
-                  )
-                ],
-              ),
-            ),
-            FlatButton(
-              child: Text("CONFIRMAR"),
-              onPressed: _onPressConfirm,
-            ),
+            Text("Sem resultados"),
           ],
         );
       }

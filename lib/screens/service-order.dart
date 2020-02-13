@@ -305,6 +305,16 @@ class _ServiceOrderState extends State<ServiceOrder> {
                 TextFormField(
                   focusNode: _phoneFocusNode,
                   controller: _phoneController,
+                  validator: (value) {
+                    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                    RegExp regExp = new RegExp(patttern);
+                    if (value.length == 0) {
+                      return 'Please enter mobile number';
+                    } else if (!regExp.hasMatch(value)) {
+                      return 'Please enter valid mobile number';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                     prefixText: "(92) ",
                     hintText: 'Telefone',

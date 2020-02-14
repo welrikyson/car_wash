@@ -14,7 +14,7 @@ description: car wash application for work order
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   http:
@@ -22,6 +22,7 @@ dependencies:
   community_material_icon: 3.5.95
   dio:  
   flutter_masked_text: ^0.7.0
+  flutter_colorpicker: 
   flutter:
     sdk: flutter
 

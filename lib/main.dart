@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: MyHomePage(title: 'washers'),
+      home: MyHomePage(title: 'Monitor de Lavagens'),
     );
   }
 }

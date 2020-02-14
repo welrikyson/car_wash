@@ -5,6 +5,7 @@ import 'package:car_wash/services/car-service.dart';
 
 import 'package:car_wash/shared/masked_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/block_picker.dart';
 
 class DialogSearch extends StatefulWidget {
   @override
@@ -72,21 +73,26 @@ class _DialogSearchState extends State<DialogSearch> {
       });
     }
   }
-
+  Color pickerColor = Colors.white60;  
+void changeColor(Color color) {
+  setState(() => pickerColor = color);
+}
   _onPressConfirm() {
     final name = _clientNameController.text;
-    final plate = _searchQuery.text;
+    final plate = _searchQuery.text;    
+    final color = this.pickerColor;
+    if(color == null) return;
 
-    if(!validePlate(plate) | (name.length < 2)) return;
+    if (!validePlate(plate) | (name.length < 2)) return;
 
-    final newClient = Vehicle(name: name, plate: plate);
+    final newClient = Vehicle(name: name, plate: plate,color: color);
     Navigator.pop(context, newClient);
   }
 
-  bool validePlate(String value){
+  bool validePlate(String value) {
     final plate = value;
 
-    if(plate.length < 7)return false;
+    if (plate.length < 7) return false;
 
     String patttern = r'[A-Z]{3}[-][0-9]{4}';
     RegExp regExp = new RegExp(patttern);
@@ -98,7 +104,7 @@ class _DialogSearchState extends State<DialogSearch> {
     RegExp regExpMerc = new RegExp(pattternMerc);
     if (regExpMerc.hasMatch(value)) {
       return true;
-    }   
+    }
 
     return false;
   }
@@ -128,15 +134,15 @@ class _DialogSearchState extends State<DialogSearch> {
                 focusNode: _textFocus,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Placa",
-                    isDense: true),
+                  border: OutlineInputBorder(),
+                  hintText: "Placa",
+                ),
                 onEditingComplete: () {
                   print("enter");
                 },
               ),
               SizedBox(
-                height: 300,
+                height: 275,
                 child: buildBody(context),
               ),
             ],
@@ -162,37 +168,65 @@ class _DialogSearchState extends State<DialogSearch> {
         return Column(
           children: <Widget>[
             Text("Sem resultados, enter para cadastrar"),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    validator: (String arg) {
-                      if (arg.length < 2) {
-                        return 'Nome deve ter mais que 2 caracteres.';
-                      } else
-                        return null;
-                    },
-                    controller: _clientNameController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+            Expanded(
+                          child: Form(
+                key: _formKey,
+                child: ListView(                  
+                  children: <Widget>[
+                    TextFormField(
+                      validator: (String arg) {
+                        if (arg.length < 2) {
+                          return 'Nome deve ter mais que 2 caracteres.';
+                        } else
+                          return null;
+                      },
+                      controller: _clientNameController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "nome",
-                        isDense: true),
-                  ),
-                  DropdownButton(
-                    onChanged: (arg) {},
-                    items: ["preto", "branco"]
-                        .map((color) => DropdownMenuItem(child: Text(color)))
-                        .toList(),
-                  )
-                ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),                  
+                    BlockPicker(
+        pickerColor: pickerColor,
+        onColorChanged: changeColor,
+        availableColors: [
+          Colors.white60,
+          Colors.black,
+          Colors.grey[600],
+          Colors.red[700],
+          Colors.blue[800],
+          Colors.green[700],
+          Colors.yellow[600],
+          Colors.purple[200],          
+        ],
+      ),
+                    
+                    SizedBox(
+                      height: 10,
+                    ),                  
+                  ],
+                ),
               ),
             ),
-            FlatButton(
-              child: Text("CONFIRMAR"),
-              onPressed: _onPressConfirm,
-            ),
+            Container(
+              width: double.infinity,
+              child: ButtonTheme(
+                    height: 40,
+                    child: RaisedButton(
+                      onPressed: _onPressConfirm,
+                      child: Text('CONFIRMAR',
+                          style: Theme.of(context)
+                              .accentTextTheme
+                              .button
+                              .copyWith(fontSize: 22)),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  ),
           ],
         );
       }

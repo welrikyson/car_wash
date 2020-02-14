@@ -184,6 +184,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
         _valueTextController.updateValue(0.0);
       }
     } catch (ex) {
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+            .pop(); //close the dialoge
       _scaffoldKey.currentState.showSnackBar(errorBar);
     }
   }

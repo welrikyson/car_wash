@@ -15,8 +15,8 @@ class Vehicle {
         plate: json["placa"],
         name: json["descricao"],
         id: int.parse(json["id_veiculo"]),
-        client: ClientModel( 
-          id: int.parse(json["id_cliente"]),
+        client: json["id_cliente"] == null ? null :ClientModel( 
+          id: int.tryParse((json["id_cliente"])),
           name: json["nome_cliente"],
           phone: json["fone_contato"],
           )

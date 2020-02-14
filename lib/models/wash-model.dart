@@ -5,6 +5,7 @@ import 'package:car_wash/models/vehicle-kind.dart';
 import 'package:car_wash/models/vehicle-model.dart';
 import 'package:car_wash/models/wash-kind.dart';
 import 'package:car_wash/models/washer-model.dart';
+import 'package:car_wash/shared/color_extension.dart';
 
 class WashModel {
   
@@ -51,7 +52,7 @@ class WashModel {
       "veiculo": vehicle.id, //id veiculo
       "veiculoPlaca": vehicle.plate, //
       "veiculoDescricao": vehicle.name,
-      "veiculoCor": vehicle.color, //
+      "veiculoCor": vehicle.color?.toHex() ?? null, //
 
       "lavador": washer?.id ?? null, //id lavador
       "lavadorDescricao": washer?.nome ?? null, //
@@ -79,33 +80,33 @@ final value = [
   ],
   [
     Product(3, "LAV GERAL - PASSEIO", 60.00),
-    Product(16, "LAV GERAL - MOTO", 60.00),   
+    Product(8, "LAV GERAL - MOTO", 30.00),   
     Product(6, "LAV GERAL - UTILITARIO", 70.00),    
     null,
   ],
   [
-    Product(1, "LAV C/ DIESEL - PASSEIO", 30.0),
-    Product(1, "LAV C/ DIESEL - MOTO", 0.0),
-    Product(1, "LAV C/ DIESEL - UTILITARIO", 50.0),
+    Product(31, "LAV SIMPLES C/ DIESEL - PASSEIO", 30.0),
+    Product(33, "LAV SIMPLES C/ DIESEL - MOTO", 30.0),
+    Product(32, "LAV SIMPLES C/ DIESEL - UTILITARIO", 50.0),
     null,
   ],
   [
     null,
     null,
     null,
-    Product(4, "CAMINHAO PEQUENO", 120.0),    
+    Product(9, "LAV CAMINHAO PQ", 120.0),    
   ],
   [
     null,
     null,
     null,
-    Product(2, "CAMINHAO MÉDIO", 150.0),    
+    Product(10, "LAV CAMINHAO MD", 150.0),    
   ],
   [
     null,
     null,
     null,
-    Product(4, "CAMINHAO GRANDE", 200.0),    
+    Product(11, "LAV CARRETA", 200.0),    
   ],
 
 ];

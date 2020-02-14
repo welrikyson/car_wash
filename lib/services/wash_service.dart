@@ -14,8 +14,8 @@ class WashService {
     var map = entity.toJson();
     map.addAll({      
       "idEmpresa": 1,
-      "idUsuario": 1,      
-      "nomeUsuario": "Bruno",     
+      "idUsuario": 3,      
+      "nomeUsuario": "Daniel",     
       "flagInsertVeiculo": entity.vehicle.id== null ? 1 : 0,      
     });    
     FormData formData = new FormData.fromMap(map);

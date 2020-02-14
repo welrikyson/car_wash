@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:car_wash/models/client-model.dart';
 import 'package:car_wash/models/vehicle-model.dart';
 import 'package:car_wash/services/car-service.dart';
 
@@ -99,9 +98,7 @@ class _DialogSearchState extends State<DialogSearch> {
     RegExp regExpMerc = new RegExp(pattternMerc);
     if (regExpMerc.hasMatch(value)) {
       return true;
-    }
-
-    
+    }   
 
     return false;
   }

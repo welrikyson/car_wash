@@ -1,11 +1,13 @@
 import 'package:car_wash/models/vehicle-kind.dart';
 import 'package:car_wash/widgets/reusable_card.dart';
 import 'package:flutter/material.dart';
+import 'package:community_material_icon/community_material_icon.dart';
+
 const Map<VehicleKind,List> vehicleKindCards = {
     VehicleKind.car: ["Carro",Icons.directions_car],
     VehicleKind.motorcycle: ["Moto",Icons.motorcycle],
-    VehicleKind.pickup: ["Utilitario",Icons.directions_railway],
-    VehicleKind.truck: ["Caminhão",Icons.directions_bus],
+    VehicleKind.pickup: ["Utilitario",CommunityMaterialIcons.car_pickup],
+    VehicleKind.truck: ["Caminhão",CommunityMaterialIcons.truck],
 };
 class VehicleKindCard extends StatefulWidget {
   final VehicleKind vehicleKind;

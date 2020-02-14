@@ -19,6 +19,7 @@ environment:
 dependencies:
   http:
   intl: ^0.16.1
+  community_material_icon: 3.5.95
   dio:  
   flutter_masked_text: ^0.7.0
   flutter:

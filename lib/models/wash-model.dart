@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:car_wash/models/client-model.dart';
 import 'package:car_wash/models/vehicle-kind.dart';
@@ -70,26 +69,45 @@ final value = [
     Product(1, "LAV SIMPLES - PASSEIO", 25.00),
     Product(7, "LAV SIMPLES - MOTO", 20.00),
     Product(4, "LAV SIMPLES - UTILITARIO", 40.00),
-    Product(9, "LAV SIMPLES - CAMINHAO", 120.00),
+    null,
   ],
   [
     Product(2, "LAV SIMPLES C/ CERA - PASSEIO", 35.00),
     Product(8, "LAV SIMPLES C/ CERA - MOTO", 30.00),
-    Product(5, "LAV SIMPLES C/ CERA - UTILITARIO", 50.00),
-    Product(10, "LAV SIMPLES C/ CERA - CAMINHAO", 150.00),
+    Product(5, "LAV SIMPLES C/ CERA - UTILITARIO", 50.00),    
+    null,
   ],
   [
     Product(3, "LAV GERAL - PASSEIO", 60.00),
     Product(16, "LAV GERAL - MOTO", 60.00),   
     Product(6, "LAV GERAL - UTILITARIO", 70.00),    
-    Product(11, "LAV GERAL - CAMINHAO", 200.00),
+    null,
   ],
   [
-    Product(1, "LAV C/ DIESEL - PASSEIO", 0.0),
+    Product(1, "LAV C/ DIESEL - PASSEIO", 30.0),
     Product(1, "LAV C/ DIESEL - MOTO", 0.0),
-    Product(1, "LAV C/ DIESEL - UTILITARIO", 0.0),
-    Product(1, "LAV C/ DIESEL - CAMINHAO", 0.0),
+    Product(1, "LAV C/ DIESEL - UTILITARIO", 50.0),
+    null,
   ],
+  [
+    null,
+    null,
+    null,
+    Product(4, "CAMINHAO PEQUENO", 120.0),    
+  ],
+  [
+    null,
+    null,
+    null,
+    Product(2, "CAMINHAO MÉDIO", 150.0),    
+  ],
+  [
+    null,
+    null,
+    null,
+    Product(4, "CAMINHAO GRANDE", 200.0),    
+  ],
+
 ];
 
 class Product {

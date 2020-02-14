@@ -3,4 +3,7 @@ enum WashKind{
   wax,
   full,
   diesel,
+  caminhaoP,
+  caminhaoM,
+  caminhaoG,
 }

@@ -6,8 +6,9 @@ class ReusableCard extends StatefulWidget {
   final String labelText;
   final Color color;
   final IconData icon;
+  final double size;
 
-  ReusableCard({this.onTap, this.labelText,this.color,this.icon});
+  ReusableCard({this.onTap, this.labelText,this.color,this.icon,this.size = 40});
   @override
   _ReusableCardState createState() => _ReusableCardState();
 }
@@ -15,12 +16,12 @@ class ReusableCard extends StatefulWidget {
 class _ReusableCardState extends State<ReusableCard> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Card(
-        child: Column(
+    return InkWell(      
+      child: Card(        
+        child: Column(          
           children: <Widget>[
             Text(widget.labelText),
-            Icon(widget.icon)
+            Icon(widget.icon,size: widget.size,)
           ],
         ),
         color: widget.color,        

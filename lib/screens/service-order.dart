@@ -23,9 +23,9 @@ class ServiceOrder extends StatefulWidget {
   _ServiceOrderState createState() => _ServiceOrderState();
 }
 
-class _ServiceOrderState extends State<ServiceOrder> {  
+class _ServiceOrderState extends State<ServiceOrder> {
   WashModel washModel = new WashModel();
-  
+
   TextEditingController _phoneController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _valueTextController =
@@ -37,6 +37,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
   final service = WashService();
 
   onClickCardVehicle(VehicleKind value) {
+    washModel.kind = null;
+
     setState(() {
       washModel.vehicleKind = value;
       _valueTextController.updateValue(washModel.valueCurrent);
@@ -104,8 +106,6 @@ class _ServiceOrderState extends State<ServiceOrder> {
   }
 
   bool formValide() {
-    
-
     if (washModel.vehicleKind == null) {
       showSnackBarMessege("Selecione um tipo de veiculo");
       return false;
@@ -159,7 +159,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
     );
     _scaffoldKey.currentState.showSnackBar(sucessBar);
   }
-  
+
   _onPressSave() async {
     try {
       if (formValide()) {
@@ -168,14 +168,14 @@ class _ServiceOrderState extends State<ServiceOrder> {
               id: 1, name: 'CONSUMIDOR', phone: _phoneController.text);
 
         this.washModel.valueAjusted =
-            _valueTextController.numberValue.toString();        
+            _valueTextController.numberValue.toString();
         washModel.phone = _phoneController.text;
         FocusScope.of(context).unfocus();
-        Dialogs.showLoadingDialog(context, _keyLoader);//invoking login
+        Dialogs.showLoadingDialog(context, _keyLoader); //invoking login
         await service.post(entity: this.washModel);
-        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();//close the dialoge
-        
-        
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+            .pop(); //close the dialoge
+
         _showSnackBarMessageSucess();
         setState(() {
           washModel = new WashModel();
@@ -187,7 +187,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
       _scaffoldKey.currentState.showSnackBar(errorBar);
     }
   }
-   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   _showSnackBarMessageSucess({String message = "Salvo com sucesso"}) {
     final sucessBar = SnackBar(
@@ -212,7 +213,7 @@ class _ServiceOrderState extends State<ServiceOrder> {
     ),
   );
 
-  initState() {    
+  initState() {
     _configPriceField();
     super.initState();
   }
@@ -224,6 +225,27 @@ class _ServiceOrderState extends State<ServiceOrder> {
             baseOffset: 0, extentOffset: _valueTextController.text.length);
       }
     });
+  }
+
+  List<Widget> _buildWashKind() {
+    List<WashKind> validWashsKind;
+    if (washModel.vehicleKind == VehicleKind.truck) {
+      validWashsKind = WashKind.values.sublist(4);
+    } else {
+      validWashsKind = WashKind.values.sublist(0, 4);
+    }
+
+    return validWashsKind
+        .map((e) => Expanded(
+                child: Container(
+              height: 70,
+              child: fromKind(
+                washKind: e,
+                onTap: onClickCarWashKind,
+                color: washModel.kind == e ? Colors.deepPurple : Colors.white,
+              ),
+            )))
+        .toList();
   }
 
   @override
@@ -287,16 +309,8 @@ class _ServiceOrderState extends State<ServiceOrder> {
                       ),
                     ),
                     Row(
-                        children: WashKind.values
-                            .map((e) => Expanded(
-                                    child: fromKind(
-                                  washKind: e,
-                                  onTap: onClickCarWashKind,
-                                  color: washModel.kind == e
-                                      ? Colors.deepPurple
-                                      : Colors.white,
-                                )))
-                            .toList()),
+                      children: _buildWashKind(),
+                    ),
                   ],
                 ),
                 SizedBox.fromSize(

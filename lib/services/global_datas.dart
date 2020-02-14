@@ -1,5 +1,5 @@
 
-const flagDebug = true;
+const flagDebug = false;
 
 const UrlBaseServe = flagDebug ? UrlBaseServeDebug :  UrlBaseServeProduction;
 const UrlBaseServeDebug = "http://192.168.0.63/lavafacil";

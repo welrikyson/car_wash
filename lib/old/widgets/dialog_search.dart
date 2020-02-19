@@ -6,6 +6,7 @@ import 'package:car_wash/services/car-service.dart';
 import 'package:car_wash/shared/masked_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/block_picker.dart';
+import 'package:car_wash/shared/color_extension.dart';
 
 class DialogSearch extends StatefulWidget {
   @override
@@ -76,6 +77,7 @@ class _DialogSearchState extends State<DialogSearch> {
   Color pickerColor = Colors.white60;  
 void changeColor(Color color) {
   setState(() => pickerColor = color);
+  color.toHex();
 }
   _onPressConfirm() {
     final name = _clientNameController.text;

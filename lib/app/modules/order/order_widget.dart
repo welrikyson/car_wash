@@ -23,7 +23,6 @@ class _OrderWidgetState extends State<OrderWidget> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/order/new');
-
         },
         child: Icon(Icons.add),
       ),
@@ -40,8 +39,8 @@ class _OrderWidgetState extends State<OrderWidget> {
           title: new Text('Início'),
         ),
         BottomNavigationBarItem(
-          icon: new Icon(Icons.notifications),
-          title: new Text('Notificações'),
+          icon: new Icon(Icons.search),
+          title: new Text('buscar'),
         ),
       ],
     );

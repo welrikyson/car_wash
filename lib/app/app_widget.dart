@@ -6,6 +6,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: "/",
+      theme: ThemeData(
+        primaryColor: Colors.deepPurple,
+        accentColor: Colors.deepPurple,
+      ),
       onGenerateRoute: AppModule.generateRoute,
     );
   }

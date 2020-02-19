@@ -11,7 +11,6 @@ class DialogSearchConsumer extends StatefulWidget {
 
 class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
   final TextEditingController _searchQuery = TextEditingController();
-  final TextEditingController _vehicleNameController = TextEditingController();
   final FocusNode _textFocus = new FocusNode();
   bool _isSearching = false;
   String _error;
@@ -64,13 +63,6 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
     }
   }
 
-  _onPressConfirm() {
-    final name = _vehicleNameController.text;
-    final plate = _searchQuery.text;    
-    final newVehicle = ClientModel(name: name, phone: plate);
-    Navigator.pop(context, newVehicle);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -81,7 +73,7 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
             children: <Widget>[
               Text(
                 "Clientes",
-                style: Theme.of(context).textTheme.display1,
+                style: Theme.of(context).textTheme.headline4,
               ),
               TextField(                
                 controller: _searchQuery,
@@ -107,8 +99,6 @@ class _DialogSearchConsumerState extends State<DialogSearchConsumer> {
       ),
     );
   }
-
-  Key _formKey = GlobalKey<FormState>();
 
   Widget buildBody(BuildContext context) {
     if (_isSearching) {

@@ -52,7 +52,7 @@ class WashModel {
       "veiculo": vehicle.id, //id veiculo
       "veiculoPlaca": vehicle.plate, //
       "veiculoDescricao": vehicle.name,
-      "veiculoCor": vehicle.color?.toHex() ?? null, //
+      "veiculoCor": vehicle.color?.toHex(false) ?? null, //
 
       "lavador": washer?.id ?? null, //id lavador
       "lavadorDescricao": washer?.nome ?? null, //

@@ -17,7 +17,7 @@ class Dialogs {
                       child: Column(children: [
                         CircularProgressIndicator(),
                         SizedBox(height: 10,),
-                        Text("Aguare....",style: Theme.of(context).textTheme.title,),
+                        Text("Aguare....",style: Theme.of(context).textTheme.headline6,),
                       ]),
                     )
                   ]));

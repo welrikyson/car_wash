@@ -13,9 +13,8 @@ class WasherService {
     var dio = Dio();
     FormData formData = new FormData.fromMap({ "q": query,});
     final response = await dio.post(urlBase+uri, data: formData);    
-    if (response.statusCode == 200) {     
-
-     return WasherModel.fromJsonList(json.decode(response.data));
+    if (response.statusCode == 200) {
+      return WasherModel.fromJsonList(json.decode(response.data));
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');

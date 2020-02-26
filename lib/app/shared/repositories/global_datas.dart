@@ -1,4 +1,6 @@
 
+
+//TODO: how to work with Environment Variables
 const flagDebug = false;
 
 const UrlBaseServe = flagDebug ? UrlBaseServeDebug :  UrlBaseServeProduction;

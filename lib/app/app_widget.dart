@@ -5,7 +5,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/",
+      initialRoute: "/",      
       theme: ThemeData(
         primaryColor: Colors.deepPurple,
         accentColor: Colors.deepPurple,

@@ -1,4 +1,4 @@
-import 'package:car_wash/app/modules/order/new_order/new_order_widget.dart';
+import 'package:car_wash/app/modules/order/pages/new_order/new_order_page.dart';
 import 'package:car_wash/app/modules/order/order_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +24,7 @@ class AppModule{
         // }
         // If args is not of the correct type, return an error page.
         // You can also throw an exception while in development.
-        return MaterialPageRoute(builder: (_) => NewOrderWidget());
+        return MaterialPageRoute(builder: (_) => NewOrderPage());
       default:
         // If there is no such named route in the switch statement, e.g. /third
         return _errorRoute();

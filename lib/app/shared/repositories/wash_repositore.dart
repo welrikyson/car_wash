@@ -1,11 +1,9 @@
-import 'package:car_wash/models/wash-model.dart';
+// TODO: remove not used package 
+import 'package:car_wash/app/shared/models/wash_model.dart';
+import 'package:car_wash/app/shared/repositories/global_datas.dart';
 import 'package:dio/dio.dart';
 
-import 'global_datas.dart';
-
-
-
-class WashService {  
+class WashRepositore {  
   var dio = Dio();
   static final urlBase = UrlBaseServe;
   Future post({WashModel entity}) async{

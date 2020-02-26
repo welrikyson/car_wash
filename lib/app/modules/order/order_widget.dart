@@ -6,9 +6,7 @@ class OrderWidget extends StatefulWidget {
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
-  onTabTapped(value) {
-
-  }
+  PageController _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +15,33 @@ class _OrderWidgetState extends State<OrderWidget> {
         title: Text('Monitor de lavagens'),
         centerTitle: true,
       ),
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      body: PageView(
+        controller: _pageController,
+        children: _screens,
+      ),
+      bottomNavigationBar: AnimatedBuilder(
+        animation: _pageController,
+        builder: (_, __) {
+          return BottomNavigationBar(
+            currentIndex: _pageController?.page?.round() ?? 0,
+            onTap: (index) {
+              _pageController.animateToPage(index,
+                  duration: Duration(microseconds: 300),
+                  curve: Curves.easeInOut);
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.list),
+                title: new Text('Lavagens'),
+              ),
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.search),
+                title: new Text('buscar'),
+              ),
+            ],
+          );
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -28,30 +51,44 @@ class _OrderWidgetState extends State<OrderWidget> {
       ),
     );
   }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      currentIndex: 0,
-      onTap: onTabTapped,
-      items: [
-        BottomNavigationBarItem(
-          icon: new Icon(Icons.home),
-          title: new Text('Início'),
-        ),
-        BottomNavigationBarItem(
-          icon: new Icon(Icons.search),
-          title: new Text('buscar'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBody() => Center(
+  
+  List<Widget> get _screens {
+    return [
+      Container(
+        padding: EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(""),
-            Text("GAP"),
+            Text(
+              'Monitor de lavagens',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            Text(
+              '''Aqui serao exibidas suas lavagens com estados difente de concluido!'''
+              '''\nEstamos trabalhando nessa funcionalidade.''',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
           ],
         ),
-      );
+      ),
+      
+      Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Encontre lavagens',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            Text(
+              '''As lavagens do dia atual serao exibidas aqui!'''
+              '''\nEstamos trabalhando nessa funcionalidade.''',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
 }

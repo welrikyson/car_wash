@@ -6,25 +6,50 @@ import 'package:car_wash/app/shared/models/product_model.dart';
 
 class WashModel {
   VehicleModel vehicle;
-  VehicleKind vehicleKind;
-  WashKind kind;
+  VehicleKind _vehicleKind;
+  WashKind _kind;
   String description;
   WasherModel washer;
-  String valueAjusted;
+  double valueAjusted;
   String phone;
   ConsumerModel consumer;  
+
+  set vehicleKind(VehicleKind currentVehicleKind) {
+    _vehicleKind = currentVehicleKind;    
+    tryRefreshPrice();    
+  }
+
+  get vehicleKind{
+    return _vehicleKind;
+  }
+
+  set kind(WashKind currentKind) {
+    _kind = currentKind;    
+    tryRefreshPrice();    
+  }
+
+  get kind{
+    return _kind;
+  }
+
+
+
+
   WashModel(
       {this.vehicle,
-      this.vehicleKind,
+      VehicleKind vehicleKind,
       this.washer,
       this.description,
-      this.kind,
+      WashKind kind,
       this.valueAjusted,
       this.consumer,
-      this.phone});
+      this.phone}){
+        this.vehicleKind = vehicleKind;
+        this.kind = kind;
+      }
 
   Map<String, dynamic> toJson() {
-    final product = ProductModel.of(kind, vehicleKind);
+    final product = ProductModel.of(_kind, _vehicleKind);
     return {
       "tipoLavagem": product.id, //id do produto
       "lavagem": product.description, //
@@ -48,6 +73,11 @@ class WashModel {
     };
   }
 
+  void tryRefreshPrice() {
+    if(_vehicleKind != null && _kind != null){
+      valueAjusted = ProductModel.of(_kind, _vehicleKind).price;
+    }
+  }
 }
 
 enum WashKind{

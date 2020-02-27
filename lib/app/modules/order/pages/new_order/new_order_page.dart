@@ -6,7 +6,6 @@ import 'package:car_wash/app/shared/models/vehicle_model.dart';
 import 'package:car_wash/app/shared/models/wash_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class NewOrderPage extends StatefulWidget {
   @override
@@ -15,22 +14,21 @@ class NewOrderPage extends StatefulWidget {
 
 class _NewOrderPageState extends State<NewOrderPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final NewOrderController controller = NewOrderController();
-  final _valueTextController =
-      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
-  
+  final NewOrderController controller = NewOrderController();  
+
   _NewOrderPageState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => _onInit());
-  }  
+  }
 
   _onInit() async {
     final chosenVehicleKind = await showSelectorVehicleKind(context);
     print('show selector vehicle done');
-    if (chosenVehicleKind != null) {      
-      setState(() => controller.washModel.vehicleKind = chosenVehicleKind );
-      final chosenWashKind = await showSelectorWashkind(context: context,vehicleKind: chosenVehicleKind );
-      if(chosenWashKind != null)
-        setState(() => controller.washModel.kind = chosenWashKind);
+    if (chosenVehicleKind != null) {
+      setState(() => controller.vehicleKind = chosenVehicleKind);
+      final chosenWashKind = await showSelectorWashkind(
+          context: context, vehicleKind: chosenVehicleKind);
+      if (chosenWashKind != null)
+        setState(() => controller.washKind = chosenWashKind);
       print('show selector vehicle done');
       //TODO: show vehicle selector
     }
@@ -44,14 +42,14 @@ class _NewOrderPageState extends State<NewOrderPage> {
       body: _buildBordy(context),
     );
   }
-  
-  //TODO: add animations and validations  
+
+  //TODO: add animations and validations
   _buildBordy(context) {
     return Form(
       child: Column(
         children: <Widget>[
           Expanded(
-                      child: ListView(
+            child: ListView(
               padding: EdgeInsets.all(5),
               children: <Widget>[
                 Padding(
@@ -70,13 +68,14 @@ class _NewOrderPageState extends State<NewOrderPage> {
                           return ChoiceChip(
                             onSelected: (bool value) {
                               setState(() {
-                                controller.washModel.vehicleKind = value ? v : null;
+                                controller.vehicleKind =
+                                    value ? v : null;
                               });
                             },
                             label: Text(
                               valueKind[0],
                             ),
-                            selected: controller.washModel.vehicleKind == v,
+                            selected: controller.vehicleKind == v,
                           );
                         }).toList(),
                       ),
@@ -96,17 +95,16 @@ class _NewOrderPageState extends State<NewOrderPage> {
                       Wrap(
                         spacing: 5,
                         children: WashKind.values.map((v) {
-
                           final washKindCard = washKindCards[v];
-                          if(washKindCard == null ) return Container();
-                          return ChoiceChip(                      
+                          if (washKindCard == null) return Container();
+                          return ChoiceChip(
                             label: Text(washKindCard[0]),
-                            onSelected: (value){
+                            onSelected: (value) {
                               setState(() {
-                                controller.washModel.kind = value ? v : null;
+                                controller.washKind = value ? v : null;
                               });
                             },
-                            selected: controller.washModel.kind == v,
+                            selected: controller.washKind == v,
                           );
                         }).toList(),
                       ),
@@ -120,11 +118,10 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   },
                   readOnly: true,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Veiculo",
-                    isDense: true,
-                    hintText: 'Selecione um veiculo'
-                  ),
+                      border: OutlineInputBorder(),
+                      labelText: "Veiculo",
+                      isDense: true,
+                      hintText: 'Selecione um veiculo'),
                   keyboardType: TextInputType.phone,
                 ),
                 SizedBox(
@@ -183,83 +180,76 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   ),
                   keyboardType: TextInputType.multiline,
                 ),
-                
               ],
             ),
           ),
-        Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 20.0, // has the effect of softening the shadow
-                        spreadRadius: 5.0, // has the effect of extending the shadow
-                        offset: Offset(
-                          10.0, // horizontal, move right 10
-                          10.0, // vertical, move down 10
-                        ),
-                      )
-                    ],
+          Container(
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 20.0, // has the effect of softening the shadow
+                  spreadRadius: 5.0, // has the effect of extending the shadow
+                  offset: Offset(
+                    10.0, // horizontal, move right 10
+                    10.0, // vertical, move down 10
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          "Valor da lavagem",
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ),
-                      Container(
-                        width: 180,
-                        child: TextFormField(
-                          enableInteractiveSelection: false,
-                          onChanged: (arg) {
-                            controller.washModel.valueAjusted = arg;
-                          },                    
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            // CurrencyInputFormatter(),
-                          ],
-                          style: TextStyle(fontSize: 40.0),
-                          textAlign: TextAlign.right,
-                          controller: _valueTextController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            prefixText: "R\$",
-                            isDense: true,
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: ButtonTheme(
-                          height: 60,
-                          child: RaisedButton(
-                            onPressed: (){},
-                            child: Text('SALVAR LAVAGEM',
-                                style: Theme.of(context)
-                                    .accentTextTheme
-                                    .button
-                                    .copyWith(fontSize: 22)),
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
+                )
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    "Valor da lavagem",
+                    style: Theme.of(context).textTheme.caption,
                   ),
                 ),
-              
+                Container(
+                  width: 180,
+                  child: TextFormField(
+                    enableInteractiveSelection: false,                    
+                    inputFormatters: [
+                      
+                      // CurrencyInputFormatter(),
+                    ],
+                    style: TextStyle(fontSize: 40.0),
+                    textAlign: TextAlign.right,
+                    controller: controller.valueTextController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixText: "R\$",
+                      isDense: true,
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  child: ButtonTheme(
+                    height: 60,
+                    child: RaisedButton(
+                      onPressed: () {},
+                      child: Text('SALVAR LAVAGEM',
+                          style: Theme.of(context)
+                              .accentTextTheme
+                              .button
+                              .copyWith(fontSize: 22)),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
-  }  
+  }
 }
-
-

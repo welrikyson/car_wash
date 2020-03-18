@@ -3,20 +3,23 @@ import 'dart:convert';
 class ConsumerModel {
   final int id;
   final String name;
+  final String contact;
   final String phone;
 
-  ConsumerModel({this.id,this.name,this.phone});
+  ConsumerModel({this.id,this.name,this.phone,this.contact});
 
   factory ConsumerModel.fromJson(Map<String, dynamic> json) => new ConsumerModel(
         name: json["descricao"],
         id: int.parse(json["id_cliente"]),
         phone: json["fone"],
+        contact: json["contact"],
       );
 
   Map<String, dynamic> toJson() => {
         "descricao": name,
         "id": id,
         "fone": phone,
+        "contato":contact,
       };
 
       static List<ConsumerModel> fromJsonList(List list){
